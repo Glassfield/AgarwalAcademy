@@ -29,19 +29,19 @@ jobs:
       - name: Create .env file
         run: |
           cat > .env << EOF
-          VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }}
+          VITE_API_BASE_URL=${{ vars.VITE_API_BASE_URL }}
           VITE_FIREBASE_API_KEY=${{ secrets.VITE_FIREBASE_API_KEY }}
-          VITE_FIREBASE_AUTH_DOMAIN=${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
-          VITE_FIREBASE_PROJECT_ID=${{ secrets.VITE_FIREBASE_PROJECT_ID }}
-          VITE_FIREBASE_STORAGE_BUCKET=${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
-          VITE_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+          VITE_FIREBASE_AUTH_DOMAIN=${{ vars.VITE_FIREBASE_AUTH_DOMAIN }}
+          VITE_FIREBASE_PROJECT_ID=${{ vars.VITE_FIREBASE_PROJECT_ID }}
+          VITE_FIREBASE_STORAGE_BUCKET=${{ vars.VITE_FIREBASE_STORAGE_BUCKET }}
+          VITE_FIREBASE_MESSAGING_SENDER_ID=${{ vars.VITE_FIREBASE_MESSAGING_SENDER_ID }}
           VITE_FIREBASE_APP_ID=${{ secrets.VITE_FIREBASE_APP_ID }}
-          VITE_ADMIN_USERNAME=${{ secrets.VITE_ADMIN_USERNAME }}
+          VITE_ADMIN_USERNAME=${{ vars.VITE_ADMIN_USERNAME }}
           VITE_ADMIN_PASSWORD=${{ secrets.VITE_ADMIN_PASSWORD }}
-          VITE_CONTACT_PHONE=${{ secrets.VITE_CONTACT_PHONE }}
-          VITE_CONTACT_EMAIL=${{ secrets.VITE_CONTACT_EMAIL }}
-          VITE_INQUIRY_EMAIL=${{ secrets.VITE_INQUIRY_EMAIL }}
-          VITE_ADMIN_EMAIL=${{ secrets.VITE_ADMIN_EMAIL }}
+          VITE_CONTACT_PHONE=${{ vars.VITE_CONTACT_PHONE }}
+          VITE_CONTACT_EMAIL=${{ vars.VITE_CONTACT_EMAIL }}
+          VITE_INQUIRY_EMAIL=${{ vars.VITE_INQUIRY_EMAIL }}
+          VITE_ADMIN_EMAIL=${{ vars.VITE_ADMIN_EMAIL }}
           EOF
 
       # 5. Build production bundle
@@ -52,8 +52,8 @@ jobs:
       - name: Deploy to Lightsail
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
+          host: ${{ vars.SERVER_HOST }}
+          username: ${{ vars.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "dist/"
           target: "/var/www/html"
@@ -63,7 +63,7 @@ jobs:
       - name: Reload Nginx
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
+          host: ${{ vars.SERVER_HOST }}
+          username: ${{ vars.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: sudo systemctl reload nginx
