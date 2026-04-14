@@ -1,0 +1,127 @@
+/* Tutor List Styles */
+
+.tutor-list {
+  width: 100%;
+}
+
+/* Header */
+.tutor-list-header {
+  margin-bottom: 2rem;
+}
+
+.tutor-list-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 0.5rem 0;
+}
+
+.tutor-list-subtitle {
+  font-size: 1rem;
+  color: #6B7280;
+  margin: 0;
+}
+
+/* Grid */
+.tutor-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .tutor-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .tutor-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .tutor-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Loading State */
+.tutor-list-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.spinner-large {
+  width: 64px;
+  height: 64px;
+  border: 4px solid rgba(30, 58, 138, 0.1);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 1.5rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.tutor-list-loading p {
+  font-size: 1.125rem;
+  color: #6B7280;
+  margin: 0;
+}
+
+/* Empty State */
+.tutor-list-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  background: #F9FAFB;
+  border-radius: 0.75rem;
+  border: 2px dashed #E5E7EB;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.tutor-list-empty h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0 0 0.5rem 0;
+}
+
+.tutor-list-empty p {
+  font-size: 1rem;
+  color: #6B7280;
+  margin: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .tutor-list-header {
+    margin-bottom: 1.5rem;
+  }
+  
+  .tutor-list-title {
+    font-size: 1.5rem;
+  }
+  
+  .tutor-list-subtitle {
+    font-size: 0.9375rem;
+  }
+}

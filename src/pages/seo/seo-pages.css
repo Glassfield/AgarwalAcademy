@@ -1,0 +1,97 @@
+/* SEO Pages Common Styles */
+
+.seo-page {
+  min-height: 100vh;
+  background: #F9FAFB;
+}
+
+.seo-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.content-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 0.75rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.content-section h2 {
+  color: var(--color-primary);
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+}
+
+.content-section h3 {
+  color: var(--color-text);
+  font-size: 1.25rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.content-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.content-section li {
+  padding: 0.5rem 0;
+  font-size: 1.0625rem;
+  color: var(--color-text);
+}
+
+.localities-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+@media (min-width: 768px) {
+  .localities-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.locality-badge {
+  background: var(--color-primary);
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  font-weight: 500;
+  font-size: 0.9375rem;
+}
+
+.search-section,
+.faq-section,
+.cta-section {
+  margin-bottom: 2rem;
+}
+
+.faq-item {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.faq-item h4 {
+  color: var(--color-primary);
+  font-size: 1.125rem;
+  margin-bottom: 0.5rem;
+}
+
+.faq-item p {
+  color: #6B7280;
+  margin: 0;
+}
+
+.tutor-cta {
+  text-align: center;
+  margin-top: 2rem;
+}

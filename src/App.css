@@ -1,0 +1,17 @@
+/* App Layout Styles */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  width: 100%;
+}
+
+/* Ensure footer stays at bottom */
+.app {
+  position: relative;
+}

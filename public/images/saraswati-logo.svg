@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFA500;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Lotus Base -->
+  <ellipse cx="50" cy="85" rx="35" ry="8" fill="#FF69B4" opacity="0.3"/>
+  
+  <!-- Lotus Petals -->
+  <path d="M 50 85 Q 30 75 30 65 Q 30 75 50 80 Z" fill="#FF69B4" opacity="0.6"/>
+  <path d="M 50 85 Q 70 75 70 65 Q 70 75 50 80 Z" fill="#FF69B4" opacity="0.6"/>
+  <path d="M 50 85 Q 40 78 35 70 Q 40 75 50 78 Z" fill="#FFB6C1" opacity="0.7"/>
+  <path d="M 50 85 Q 60 78 65 70 Q 60 75 50 78 Z" fill="#FFB6C1" opacity="0.7"/>
+  
+  <!-- Deity Figure (Abstract) -->
+  <circle cx="50" cy="40" r="12" fill="url(#grad1)"/>
+  
+  <!-- Crown/Mukut -->
+  <path d="M 38 35 L 42 25 L 46 30 L 50 20 L 54 30 L 58 25 L 62 35 Z" fill="#FFD700" stroke="#FFA500" stroke-width="1"/>
+  
+  <!-- Hands with Veena (musical instrument) -->
+  <ellipse cx="35" cy="50" rx="4" ry="8" fill="#FFE4B5" opacity="0.8"/>
+  <ellipse cx="65" cy="50" rx="4" ry="8" fill="#FFE4B5" opacity="0.8"/>
+  
+  <!-- Veena (simplified) -->
+  <rect x="32" y="48" width="36" height="4" rx="2" fill="#8B4513" opacity="0.8"/>
+  <circle cx="30" cy="50" r="3" fill="#8B4513" opacity="0.8"/>
+  <circle cx="70" cy="50" r="3" fill="#8B4513" opacity="0.8"/>
+  
+  <!-- Book (Knowledge) -->
+  <rect x="42" y="60" width="16" height="12" fill="#FFF" stroke="#FFD700" stroke-width="2" rx="1"/>
+  <line x1="42" y1="63" x2="58" y2="63" stroke="#FFD700" stroke-width="0.5"/>
+  <line x1="42" y1="66" x2="58" y2="66" stroke="#FFD700" stroke-width="0.5"/>
+  <line x1="42" y1="69" x2="58" y2="69" stroke="#FFD700" stroke-width="0.5"/>
+  
+  <!-- Om Symbol -->
+  <text x="50" y="95" font-family="Arial" font-size="12" fill="#FF6347" text-anchor="middle" font-weight="bold">ॐ</text>
+  
+  <!-- Halo/Aura -->
+  <circle cx="50" cy="40" r="16" fill="none" stroke="#FFD700" stroke-width="1.5" opacity="0.5"/>
+  <circle cx="50" cy="40" r="18" fill="none" stroke="#FFA500" stroke-width="0.8" opacity="0.3"/>
+</svg>

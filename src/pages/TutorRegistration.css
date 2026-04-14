@@ -1,0 +1,42 @@
+/* Tutor Registration Page Styles */
+
+.tutor-registration-page {
+  min-height: 100vh;
+  background: #F9FAFB;
+}
+
+.registration-info {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  padding: 3rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.registration-info h2 {
+  color: var(--color-primary);
+  margin-bottom: 1.5rem;
+}
+
+.registration-info ul {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+}
+
+.registration-info li {
+  padding: 0.75rem 0;
+  font-size: 1.0625rem;
+  color: var(--color-text);
+}
+
+.note {
+  background: #FFF7ED;
+  border-left: 4px solid var(--color-accent);
+  padding: 1rem 1.5rem;
+  margin-top: 2rem;
+  border-radius: 0.375rem;
+  font-size: 0.9375rem;
+  color: #9A3412;
+}

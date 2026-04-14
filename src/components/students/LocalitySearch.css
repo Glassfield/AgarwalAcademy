@@ -1,0 +1,227 @@
+/* Locality Search Styles */
+
+.locality-search {
+  background: white;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.search-header {
+  margin-bottom: 1.25rem;
+}
+
+.search-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0 0 0.375rem 0;
+}
+
+.search-subtitle {
+  font-size: 0.875rem;
+  color: #6B7280;
+  margin: 0;
+}
+
+/* Search Input */
+.search-input-wrapper {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.25rem;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.875rem 3rem 0.875rem 3rem;
+  font-size: 1rem;
+  font-family: var(--font-secondary);
+  border: 2px solid #E5E7EB;
+  border-radius: 0.5rem;
+  background-color: white;
+  color: var(--color-text);
+  transition: all var(--transition-base);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+}
+
+.clear-button {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #6B7280;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: color var(--transition-base);
+}
+
+.clear-button:hover {
+  color: var(--color-text);
+}
+
+/* Locality Dropdown */
+.locality-dropdown {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #E5E7EB;
+  border-radius: 0.5rem;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.locality-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  border: none;
+  background: white;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  text-align: left;
+  border-bottom: 1px solid #F3F4F6;
+}
+
+.locality-item:last-child {
+  border-bottom: none;
+}
+
+.locality-item:hover {
+  background-color: #F9FAFB;
+}
+
+.locality-item.selected {
+  background-color: rgba(30, 58, 138, 0.05);
+  color: var(--color-primary);
+}
+
+.locality-icon {
+  font-size: 1.125rem;
+  flex-shrink: 0;
+}
+
+.locality-name {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: inherit;
+}
+
+/* No Results */
+.no-results {
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.no-results p {
+  font-size: 0.9375rem;
+  color: #6B7280;
+  margin: 0 0 0.5rem 0;
+}
+
+.no-results-hint {
+  font-size: 0.8125rem;
+  color: #9CA3AF;
+}
+
+/* Popular Localities */
+.popular-localities {
+  margin-top: 1rem;
+}
+
+.popular-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0 0 0.875rem 0;
+}
+
+.popular-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .popular-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .popular-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.popular-item {
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text);
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  text-align: center;
+}
+
+.popular-item:hover {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(30, 58, 138, 0.2);
+}
+
+/* Mobile Optimization */
+@media (max-width: 640px) {
+  .locality-search {
+    padding: 1.25rem;
+  }
+  
+  .search-input {
+    min-height: 48px;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  .popular-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Scrollbar styling for dropdown */
+.locality-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.locality-dropdown::-webkit-scrollbar-track {
+  background: #F3F4F6;
+  border-radius: 3px;
+}
+
+.locality-dropdown::-webkit-scrollbar-thumb {
+  background: #D1D5DB;
+  border-radius: 3px;
+}
+
+.locality-dropdown::-webkit-scrollbar-thumb:hover {
+  background: #9CA3AF;
+}

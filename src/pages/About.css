@@ -1,0 +1,33 @@
+/* About Page Styles */
+
+.about-page {
+  min-height: 100vh;
+  background: #F9FAFB;
+}
+
+.about-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.about-content h2 {
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+}
+
+.about-content h3 {
+  color: var(--color-text);
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.about-content ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+}
+
+.about-content li {
+  padding: 0.75rem 0;
+  font-size: 1.0625rem;
+}
