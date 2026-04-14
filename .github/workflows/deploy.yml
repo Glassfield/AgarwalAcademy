@@ -56,7 +56,7 @@ jobs:
           username: ${{ vars.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "dist/"
-          target: "/var/www/html"
+          target: "/home/admin/agarwal-academy/dist"
           strip_components: 1   # copies contents of dist/ not the folder itself
 
       # 7. Reload Nginx on the server
