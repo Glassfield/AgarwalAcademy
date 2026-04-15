@@ -120,6 +120,7 @@ app.get('/api/tutors', (req, res) => {
       ...tutor,
       subjects: tutor.subjects ? JSON.parse(tutor.subjects) : [],
       classes: tutor.classes ? JSON.parse(tutor.classes) : [],
+      teachingSlots: tutor.teachingSlots ? JSON.parse(tutor.teachingSlots) : [],
       areas: tutor.areas ? JSON.parse(tutor.areas) : []
     }));
     
@@ -139,6 +140,7 @@ app.get('/api/tutors/approved', (req, res) => {
       ...tutor,
       subjects: tutor.subjects ? JSON.parse(tutor.subjects) : [],
       classes: tutor.classes ? JSON.parse(tutor.classes) : [],
+      teachingSlots: tutor.teachingSlots ? JSON.parse(tutor.teachingSlots) : [],
       areas: tutor.areas ? JSON.parse(tutor.areas) : []
     }));
     
@@ -158,13 +160,12 @@ app.post('/api/tutors', (req, res) => {
       fullName, displayName, dateOfBirth, gender, mobileNumber,
       currentAddressLine1, currentAddressLine2, currentCity, currentState, currentPinCode,
       permanentAddressLine1, permanentAddressLine2, permanentCity, permanentState, permanentPinCode,
-      subjects, classes, experience, areas, aadharFile, panFile
+      teachingSlots, experience, areas, aadharFile, panFile
     } = req.body;
     
     console.log('Preparing to insert tutor:', {
       fullName, displayName, dateOfBirth, gender, mobileNumber,
-      subjects: JSON.stringify(subjects),
-      classes: JSON.stringify(classes),
+      teachingSlots,
       experience,
       areas: JSON.stringify(areas)
     });
@@ -175,15 +176,16 @@ app.post('/api/tutors', (req, res) => {
         fullName, displayName, dateOfBirth, gender, mobileNumber,
         currentAddressLine1, currentAddressLine2, currentCity, currentState, currentPinCode,
         permanentAddressLine1, permanentAddressLine2, permanentCity, permanentState, permanentPinCode,
-        subjects, classes, experience, areas, aadharFile, panFile, createdAt, updatedAt
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        teachingSlots, experience, areas, aadharFile, panFile, createdAt, updatedAt
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
     
     const result = stmt.run(
       fullName, displayName, dateOfBirth, gender, mobileNumber,
       currentAddressLine1, currentAddressLine2, currentCity, currentState, currentPinCode,
       permanentAddressLine1, permanentAddressLine2, permanentCity, permanentState, permanentPinCode,
-      JSON.stringify(subjects), JSON.stringify(classes), experience, JSON.stringify(areas),
+      typeof teachingSlots === 'string' ? teachingSlots : JSON.stringify(teachingSlots || []),
+      experience, JSON.stringify(areas || []),
       aadharFile, panFile, now, now
     );
     
@@ -209,7 +211,7 @@ app.put('/api/tutors/:id', (req, res) => {
       fullName, displayName, dateOfBirth, gender, mobileNumber,
       currentAddressLine1, currentAddressLine2, currentCity, currentState, currentPinCode,
       permanentAddressLine1, permanentAddressLine2, permanentCity, permanentState, permanentPinCode,
-      subjects, classes, experience, areas, status, verified
+      teachingSlots, experience, areas, status, verified
     } = req.body;
     
     const stmt = db.prepare(`
@@ -217,7 +219,7 @@ app.put('/api/tutors/:id', (req, res) => {
         fullName = ?, displayName = ?, dateOfBirth = ?, gender = ?, mobileNumber = ?,
         currentAddressLine1 = ?, currentAddressLine2 = ?, currentCity = ?, currentState = ?, currentPinCode = ?,
         permanentAddressLine1 = ?, permanentAddressLine2 = ?, permanentCity = ?, permanentState = ?, permanentPinCode = ?,
-        subjects = ?, classes = ?, experience = ?, areas = ?, status = ?, verified = ?,
+        teachingSlots = ?, experience = ?, areas = ?, status = ?, verified = ?,
         updatedAt = datetime('now')
       WHERE id = ?
     `);
@@ -226,7 +228,8 @@ app.put('/api/tutors/:id', (req, res) => {
       fullName, displayName, dateOfBirth, gender, mobileNumber,
       currentAddressLine1, currentAddressLine2, currentCity, currentState, currentPinCode,
       permanentAddressLine1, permanentAddressLine2, permanentCity, permanentState, permanentPinCode,
-      JSON.stringify(subjects), JSON.stringify(classes), experience, JSON.stringify(areas),
+      typeof teachingSlots === 'string' ? teachingSlots : JSON.stringify(teachingSlots || []),
+      experience, JSON.stringify(areas || []),
       status, verified ? 1 : 0, id
     );
     

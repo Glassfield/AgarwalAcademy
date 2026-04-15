@@ -27,6 +27,7 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('inquiries');
   const [editingTutor, setEditingTutor] = useState(null);
   const [viewingInquiry, setViewingInquiry] = useState(null);
+  const [viewingTutorSlots, setViewingTutorSlots] = useState(null);
   const [settings, setSettings] = useState({});
   const [savingSettings, setSavingSettings] = useState(false);
   
@@ -461,8 +462,7 @@ const AdminDashboard = () => {
                       <tr>
                         <th>Name</th>
                         <th>Phone</th>
-                        <th>Subjects</th>
-                        <th>Classes</th>
+                        <th>Teaching</th>
                         <th>Experience</th>
                         <th>Areas</th>
                         <th>Status</th>
@@ -480,16 +480,24 @@ const AdminDashboard = () => {
                           </td>
                           <td>{tutor.phone}</td>
                           <td>
-                            {Array.isArray(tutor.subjects) 
-                              ? tutor.subjects.slice(0, 2).join(', ') 
-                              : tutor.subjects}
-                            {Array.isArray(tutor.subjects) && tutor.subjects.length > 2 && ' +' + (tutor.subjects.length - 2)}
-                          </td>
-                          <td>
-                            {Array.isArray(tutor.classes) 
-                              ? tutor.classes.slice(0, 2).join(', ') 
-                              : tutor.classes}
-                            {Array.isArray(tutor.classes) && tutor.classes.length > 2 && ' +' + (tutor.classes.length - 2)}
+                            {(() => {
+                              let slots = [];
+                              try { slots = typeof tutor.teachingSlots === 'string' ? JSON.parse(tutor.teachingSlots) : (tutor.teachingSlots || []); } catch(e) {}
+                              if (slots.length === 0) {
+                                // Fallback: compose from old subjects/classes fields if present
+                                const subs = Array.isArray(tutor.subjects) ? tutor.subjects : (tutor.subjects ? [tutor.subjects] : []);
+                                if (subs.length > 0) return <span style={{fontSize:'0.8rem',color:'#6b7280'}}>{subs.slice(0,2).join(', ')}{subs.length > 2 ? ` +${subs.length-2}` : ''}</span>;
+                                return <span style={{color:'#9ca3af',fontSize:'0.8rem'}}>—</span>;
+                              }
+                              return (
+                                <span
+                                  style={{fontSize:'0.8rem',color:'#2563eb',cursor:'pointer',textDecoration:'underline'}}
+                                  onClick={() => setViewingTutorSlots({ name: tutor.displayName, slots })}
+                                >
+                                  {slots.length} slot{slots.length !== 1 ? 's' : ''} 👁️
+                                </span>
+                              );
+                            })()}
                           </td>
                           <td>{tutor.experience}</td>
                           <td>
@@ -604,6 +612,42 @@ const AdminDashboard = () => {
                   }
                 </div>
               ) : null)}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Teaching Slots Modal */}
+      {viewingTutorSlots && (
+        <div className="modal-overlay" onClick={() => setViewingTutorSlots(null)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '680px', maxHeight: '90vh', overflowY: 'auto' }}>
+            <div style={{ position: 'sticky', top: 0, background: 'white', padding: '1rem 1.25rem', borderBottom: '1px solid #e5e7eb', display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 10 }}>
+              <h3 style={{ margin: 0, fontSize: '1.1rem' }}>Teaching Details — {viewingTutorSlots.name}</h3>
+              <button onClick={() => setViewingTutorSlots(null)} style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', lineHeight: 1 }}>×</button>
+            </div>
+            <div style={{ padding: '1.25rem', overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
+                <thead>
+                  <tr style={{ background: '#f9fafb' }}>
+                    <th style={{ padding: '0.5rem 0.75rem', textAlign: 'left', borderBottom: '1px solid #e5e7eb', fontWeight: 600 }}>Class</th>
+                    <th style={{ padding: '0.5rem 0.75rem', textAlign: 'left', borderBottom: '1px solid #e5e7eb', fontWeight: 600 }}>Subject</th>
+                    <th style={{ padding: '0.5rem 0.75rem', textAlign: 'left', borderBottom: '1px solid #e5e7eb', fontWeight: 600 }}>Fees</th>
+                    <th style={{ padding: '0.5rem 0.75rem', textAlign: 'left', borderBottom: '1px solid #e5e7eb', fontWeight: 600 }}>Per</th>
+                    <th style={{ padding: '0.5rem 0.75rem', textAlign: 'left', borderBottom: '1px solid #e5e7eb', fontWeight: 600 }}>Remarks</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {viewingTutorSlots.slots.map((slot, idx) => (
+                    <tr key={idx} style={{ borderBottom: '1px solid #f3f4f6' }}>
+                      <td style={{ padding: '0.5rem 0.75rem' }}>{slot.class}</td>
+                      <td style={{ padding: '0.5rem 0.75rem' }}>{slot.subject}</td>
+                      <td style={{ padding: '0.5rem 0.75rem' }}>₹{slot.fees}</td>
+                      <td style={{ padding: '0.5rem 0.75rem', textTransform: 'capitalize' }}>{slot.feeType}</td>
+                      <td style={{ padding: '0.5rem 0.75rem', color: '#6b7280' }}>{slot.remarks || '—'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>

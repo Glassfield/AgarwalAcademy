@@ -31,9 +31,7 @@ const TutorRegistrationForm = ({ skipOTP = false }) => {
     permanentCity: '',
     permanentState: '',
     permanentPinCode: '',
-    subjects: [],
-    subjectOther: '',
-    classes: [],
+    teachingSlots: [{ id: 1, class: '', subject: '', fees: '', feeType: 'hourly', remarks: '' }],
     experience: '',
     areas: [],
     aadharFile: null,
@@ -117,8 +115,11 @@ const TutorRegistrationForm = ({ skipOTP = false }) => {
       if (!formData.permanentState.trim()) newErrors.permanentState = 'Please enter state';
       if (!/^[0-9]{6}$/.test(formData.permanentPinCode)) newErrors.permanentPinCode = 'Please enter valid 6-digit PIN code';
     } else if (step === 2) {
-      if (formData.subjects.length === 0) newErrors.subjects = 'Please select at least one subject';
-      if (formData.classes.length === 0) newErrors.classes = 'Please select at least one class';
+      if (formData.teachingSlots.length === 0) {
+        newErrors.teachingSlots = 'Please add at least one class/subject combination';
+      } else if (formData.teachingSlots.some(s => !s.class || !s.subject || !s.fees)) {
+        newErrors.teachingSlots = 'Please fill in class, subject, and fees for every row';
+      }
       if (!formData.experience) newErrors.experience = 'Please select your experience';
     } else if (step === 3) {
       if (formData.areas.length === 0) newErrors.areas = 'Please select at least one area';
@@ -239,8 +240,7 @@ const TutorRegistrationForm = ({ skipOTP = false }) => {
         permanentCity: formData.permanentCity,
         permanentState: formData.permanentState,
         permanentPinCode: formData.permanentPinCode,
-        subjects: formData.subjects,
-        classes: formData.classes,
+        teachingSlots: JSON.stringify(formData.teachingSlots),
         experience: formData.experience,
         areas: formData.areas,
         aadharFile: formData.aadharFile?.name || '',
@@ -267,24 +267,26 @@ const TutorRegistrationForm = ({ skipOTP = false }) => {
     }
   };
 
-  const handleSubjectToggle = (id) => {
+  const addTeachingSlot = () => {
     setFormData(prev => ({
       ...prev,
-      subjects: prev.subjects.includes(id)
-        ? prev.subjects.filter(s => s !== id)
-        : [...prev.subjects, id]
+      teachingSlots: [...prev.teachingSlots, { id: Date.now(), class: '', subject: '', fees: '', feeType: 'hourly', remarks: '' }]
     }));
-    setErrors({ ...errors, subjects: '' });
   };
 
-  const handleClassToggle = (id) => {
+  const updateTeachingSlot = (id, field, value) => {
     setFormData(prev => ({
       ...prev,
-      classes: prev.classes.includes(id)
-        ? prev.classes.filter(c => c !== id)
-        : [...prev.classes, id]
+      teachingSlots: prev.teachingSlots.map(slot => slot.id === id ? { ...slot, [field]: value } : slot)
     }));
-    setErrors({ ...errors, classes: '' });
+    setErrors(prev => ({ ...prev, teachingSlots: '' }));
+  };
+
+  const removeTeachingSlot = (id) => {
+    setFormData(prev => ({
+      ...prev,
+      teachingSlots: prev.teachingSlots.filter(slot => slot.id !== id)
+    }));
   };
 
   const handleAreaToggle = (id) => {
@@ -575,61 +577,103 @@ const TutorRegistrationForm = ({ skipOTP = false }) => {
         {currentStep === 2 && (
           <div className="form-step">
             <h1 className="step-title">What do you teach?</h1>
-            <p className="step-description">Subjects, classes, and experience</p>
+            <p className="step-description">Add each class–subject combination with your fees</p>
 
-            <h2 className="step-subtitle">Subjects (select multiple) *</h2>
-            <div className="tiles-grid-rows">
-              {SUBJECT_OPTIONS.map(option => (
-                <SelectionTile
-                  key={option.id}
-                  {...option}
-                  selected={formData.subjects.includes(option.id)}
-                  onClick={handleSubjectToggle}
-                  size="medium"
-                />
-              ))}
+            <div className="teaching-table-wrapper">
+              <table className="teaching-table">
+                <thead>
+                  <tr>
+                    <th>Class *</th>
+                    <th>Subject *</th>
+                    <th>Fees (₹) *</th>
+                    <th>Per</th>
+                    <th>Remarks</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {formData.teachingSlots.map(slot => (
+                    <tr key={slot.id} className="teaching-row">
+                      <td>
+                        <select
+                          className="slot-select"
+                          value={slot.class}
+                          onChange={(e) => updateTeachingSlot(slot.id, 'class', e.target.value)}
+                        >
+                          <option value="">Select</option>
+                          {CLASS_OPTIONS.map(o => (
+                            <option key={o.id} value={o.label}>{o.label}</option>
+                          ))}
+                        </select>
+                      </td>
+                      <td>
+                        <select
+                          className="slot-select"
+                          value={slot.subject}
+                          onChange={(e) => updateTeachingSlot(slot.id, 'subject', e.target.value)}
+                        >
+                          <option value="">Select</option>
+                          {SUBJECT_OPTIONS.map(o => (
+                            <option key={o.id} value={o.label}>{o.label}</option>
+                          ))}
+                        </select>
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          className="slot-input slot-fees"
+                          placeholder="0"
+                          min="0"
+                          value={slot.fees}
+                          onChange={(e) => updateTeachingSlot(slot.id, 'fees', e.target.value)}
+                        />
+                      </td>
+                      <td>
+                        <div className="fee-type-toggle">
+                          <button
+                            type="button"
+                            className={`fee-type-btn${slot.feeType === 'hourly' ? ' active' : ''}`}
+                            onClick={() => updateTeachingSlot(slot.id, 'feeType', 'hourly')}
+                          >hr</button>
+                          <button
+                            type="button"
+                            className={`fee-type-btn${slot.feeType === 'monthly' ? ' active' : ''}`}
+                            onClick={() => updateTeachingSlot(slot.id, 'feeType', 'monthly')}
+                          >mo</button>
+                        </div>
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          className="slot-input slot-remarks"
+                          placeholder="Optional"
+                          value={slot.remarks}
+                          onChange={(e) => updateTeachingSlot(slot.id, 'remarks', e.target.value)}
+                        />
+                      </td>
+                      <td>
+                        {formData.teachingSlots.length > 1 && (
+                          <button
+                            type="button"
+                            className="remove-slot-btn"
+                            onClick={() => removeTeachingSlot(slot.id)}
+                            title="Remove row"
+                          >×</button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-            {errors.subjects && <div className="error-message">{errors.subjects}</div>}
 
-            {formData.subjects.includes('other') && (
-              <div style={{ marginTop: '1rem' }}>
-                <input
-                  type="text"
-                  className="full-input"
-                  placeholder="Specify your subject"
-                  value={formData.subjectOther}
-                  onChange={(e) => setFormData({ ...formData, subjectOther: e.target.value })}
-                />
-              </div>
-            )}
+            {errors.teachingSlots && <div className="error-message">{errors.teachingSlots}</div>}
 
-            {formData.subjects.length > 0 && (
-              <div className="selected-count">
-                ✓ {formData.subjects.length} subject{formData.subjects.length > 1 ? 's' : ''} selected
-              </div>
-            )}
+            <button type="button" className="add-slot-btn" onClick={addTeachingSlot}>
+              + Add Another Class / Subject
+            </button>
 
-            <h2 className="step-subtitle">Classes (select multiple) *</h2>
-            <div className="tiles-grid-rows">
-              {CLASS_OPTIONS.map(option => (
-                <SelectionTile
-                  key={option.id}
-                  {...option}
-                  selected={formData.classes.includes(option.id)}
-                  onClick={handleClassToggle}
-                  size="medium"
-                />
-              ))}
-            </div>
-            {errors.classes && <div className="error-message">{errors.classes}</div>}
-
-            {formData.classes.length > 0 && (
-              <div className="selected-count">
-                ✓ {formData.classes.length} class{formData.classes.length > 1 ? 'es' : ''} selected
-              </div>
-            )}
-
-            <h2 className="step-subtitle">Teaching Experience *</h2>
+            <h2 className="step-subtitle" style={{ marginTop: '1.75rem' }}>Teaching Experience *</h2>
             <div className="tiles-grid-rows">
               {EXPERIENCE_OPTIONS.map(option => (
                 <SelectionTile

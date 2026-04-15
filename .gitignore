@@ -28,5 +28,10 @@ dist-ssr
 .env.local
 .env.production
 
+# SQLite database files
+*.db
+*.sqlite
+*.sqlite3
+
 # Build files
 build/

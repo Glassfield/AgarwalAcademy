@@ -50,6 +50,7 @@ const initDatabase = () => {
       permanentPinCode TEXT,
       subjects TEXT,
       classes TEXT,
+      teachingSlots TEXT,
       experience TEXT,
       areas TEXT,
       aadharFile TEXT,
@@ -83,6 +84,14 @@ const initDatabase = () => {
     const insertSetting = db.prepare('INSERT INTO settings (settingKey, settingValue, updatedAt) VALUES (?, ?, datetime("now"))');
     insertSetting.run('whatsappNumber', '');
     console.log('✅ Default settings inserted');
+  }
+
+  // Migrate: add teachingSlots column if it doesn't exist yet
+  try {
+    db.exec(`ALTER TABLE tutors ADD COLUMN teachingSlots TEXT`);
+    console.log('✅ Migrated: added teachingSlots column');
+  } catch (e) {
+    // Column already exists — ignore
   }
 
   console.log('✅ Database tables created/verified');
