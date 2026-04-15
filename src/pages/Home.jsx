@@ -1,15 +1,57 @@
+import { useState, useEffect } from 'react';
 import SEO from '@/components/common/SEO';
 import Button from '@/components/common/Button';
 import Card from '@/components/common/Card';
 import { DEFAULT_SEO } from '@/config/seoConfig';
 import { organizationSchema, localBusinessSchema, serviceSchema } from '@/config/structuredData';
+import { getAllOptions } from '@/services/api/optionsService';
 import './Home.css';
 
 /**
  * Home Page Component
  * Landing page with hero, features, how it works, and CTAs
  */
+const SUBJECT_EMOJI = {
+  'Mathematics': '📐', 'Maths': '📐',
+  'Physics': '⚛️',
+  'Chemistry': '🧪',
+  'Biology': '🧬',
+  'English': '📚',
+  'Hindi': '🇮🇳',
+  'Sanskrit': '📜',
+  'Social Science': '🌍', 'SST': '🌍', 'EVS': '🌿',
+  'Computer Science': '💻', 'Computer': '💻',
+  'French': '🇫🇷',
+  'Spanish': '🇪🇸',
+  'German': '🇩🇪',
+  'Accountancy': '📊', 'Accounts': '📊',
+  'Economics': '📈',
+  'Business Studies': '💼',
+  'History': '🏛️',
+  'Geography': '🗺️',
+  'Political Science': '⚖️',
+  'Psychology': '🧠',
+  'Sociology': '👥',
+  'Science': '🔬',
+  'Spoken English': '🗣️',
+  'IT': '🖥️',
+};
+const getEmoji = (label) => {
+  for (const [key, emoji] of Object.entries(SUBJECT_EMOJI)) {
+    if (label.toLowerCase().includes(key.toLowerCase())) return emoji;
+  }
+  return '📖';
+};
+
 const Home = () => {
+  const [subjects, setSubjects] = useState([]);
+
+  useEffect(() => {
+    getAllOptions()
+      .then(result => { if (result.success) setSubjects(result.data.subjects || []); })
+      .catch(() => {}); // silently fall back to empty — no subjects shown if API fails
+  }, []);
+
   // Combine multiple schemas
   const structuredData = [
     organizationSchema,
@@ -139,16 +181,18 @@ const Home = () => {
         <div className="container-custom">
           <h2 className="section-title">Subjects We Cover</h2>
           <div className="subjects-grid">
-            <div className="subject-badge">📐 Mathematics</div>
-            <div className="subject-badge">⚛️ Physics</div>
-            <div className="subject-badge">🧪 Chemistry</div>
-            <div className="subject-badge">🧬 Biology</div>
-            <div className="subject-badge">📚 English</div>
-            <div className="subject-badge">🇮🇳 Hindi</div>
-            <div className="subject-badge">🌍 Social Science</div>
-            <div className="subject-badge">💻 Computer Science</div>
-            <div className="subject-badge">🇫🇷 French</div>
-            <div className="subject-badge">🇩🇪 German</div>
+            {subjects.length > 0
+              ? subjects.map(s => (
+                  <div key={s.id} className="subject-badge">
+                    {getEmoji(s.label)} {s.label}
+                  </div>
+                ))
+              : /* fallback while loading or if API is unavailable */
+                ['Mathematics','Physics','Chemistry','Biology','English','Hindi','Social Science','Computer Science','French','German']
+                  .map(name => (
+                    <div key={name} className="subject-badge">{getEmoji(name)} {name}</div>
+                  ))
+            }
           </div>
         </div>
       </section>
