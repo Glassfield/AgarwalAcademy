@@ -50,7 +50,7 @@ const Home = () => {
               </Button>
             </div>
             <p className="hero-trust">
-              ✓ 100% Verified Tutors &nbsp; | &nbsp; ✓ Privacy Guaranteed &nbsp; | &nbsp; ✓ Trusted by 500+ Families
+              ✓ 100% Verified Tutors &nbsp; | &nbsp; ✓ Privacy Guaranteed &nbsp; | &nbsp; ✓ Trusted by 25000+ Families
             </p>
           </div>
         </div>
