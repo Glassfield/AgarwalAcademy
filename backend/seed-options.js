@@ -11,54 +11,50 @@ const db = new Database(dbPath);
 console.log('Seeding form options...');
 
 const options = [
-  // Subjects
-  { category: 'subjects', optionId: 'mathematics', label: 'Mathematics' },
-  { category: 'subjects', optionId: 'physics', label: 'Physics' },
-  { category: 'subjects', optionId: 'chemistry', label: 'Chemistry' },
-  { category: 'subjects', optionId: 'biology', label: 'Biology' },
-  { category: 'subjects', optionId: 'english', label: 'English' },
-  { category: 'subjects', optionId: 'hindi', label: 'Hindi' },
-  { category: 'subjects', optionId: 'social-science', label: 'Social Science' },
-  { category: 'subjects', optionId: 'computer-science', label: 'Computer Science' },
-  { category: 'subjects', optionId: 'accountancy', label: 'Accountancy' },
-  { category: 'subjects', optionId: 'business-studies', label: 'Business Studies' },
-  { category: 'subjects', optionId: 'economics', label: 'Economics' },
-  
   // Classes
-  { category: 'classes', optionId: 'class-1', label: 'Class 1' },
-  { category: 'classes', optionId: 'class-2', label: 'Class 2' },
-  { category: 'classes', optionId: 'class-3', label: 'Class 3' },
-  { category: 'classes', optionId: 'class-4', label: 'Class 4' },
-  { category: 'classes', optionId: 'class-5', label: 'Class 5' },
-  { category: 'classes', optionId: 'class-6', label: 'Class 6' },
-  { category: 'classes', optionId: 'class-7', label: 'Class 7' },
-  { category: 'classes', optionId: 'class-8', label: 'Class 8' },
-  { category: 'classes', optionId: 'class-9', label: 'Class 9' },
-  { category: 'classes', optionId: 'class-10', label: 'Class 10' },
-  { category: 'classes', optionId: 'class-11', label: 'Class 11' },
-  { category: 'classes', optionId: 'class-12', label: 'Class 12' },
-  
+  ...['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII',
+      'JEE','NEET','BA','BCOM','BSc','CLAT','CUET','IELTS'].map(c => ({
+    category: 'classes', optionId: c, label: c
+  })),
+
+  // Boards
+  ...['CBSE','ICSE','IB','IGCSE'].map(b => ({
+    category: 'boards', optionId: b, label: b
+  })),
+
+  // Subjects
+  ...['English','Hindi','Maths','Science','SST','Sanskrit','French','Spanish',
+      'Physics','Chemistry','Biology','Accounts','Computer Science',
+      'Information Practice','Business Studies','Political Science','Economics',
+      'Psychology','Sociology','History','Geography','Spoken English',
+      'Corporate Accounting','Cost Accounting','Management Accounting',
+      'Tax','Finance','Statistics'].map(s => ({
+    category: 'subjects', optionId: s, label: s
+  })),
+
   // Experience
-  { category: 'experience', optionId: '0-1', label: '0-1 years' },
-  { category: 'experience', optionId: '1-3', label: '1-3 years' },
-  { category: 'experience', optionId: '3-5', label: '3-5 years' },
+  { category: 'experience', optionId: '0-2', label: '0-2 years' },
+  { category: 'experience', optionId: '2-5', label: '2-5 years' },
   { category: 'experience', optionId: '5-10', label: '5-10 years' },
   { category: 'experience', optionId: '10+', label: '10+ years' },
-  
-  // Areas (South Delhi localities)
-  { category: 'areas', optionId: 'kalkaji', label: 'Kalkaji' },
-  { category: 'areas', optionId: 'greater-kailash', label: 'Greater Kailash' },
-  { category: 'areas', optionId: 'defence-colony', label: 'Defence Colony' },
-  { category: 'areas', optionId: 'lajpat-nagar', label: 'Lajpat Nagar' },
-  { category: 'areas', optionId: 'cr-park', label: 'CR Park' },
-  { category: 'areas', optionId: 'nehru-place', label: 'Nehru Place' },
-  { category: 'areas', optionId: 'hauz-khas', label: 'Hauz Khas' },
-  { category: 'areas', optionId: 'saket', label: 'Saket' },
-  { category: 'areas', optionId: 'malviya-nagar', label: 'Malviya Nagar' },
-  { category: 'areas', optionId: 'green-park', label: 'Green Park' },
-  { category: 'areas', optionId: 'safdarjung', label: 'Safdarjung' },
-  { category: 'areas', optionId: 'vasant-kunj', label: 'Vasant Kunj' },
-  { category: 'areas', optionId: 'vasant-vihar', label: 'Vasant Vihar' },
+
+  // Areas
+  ...['Safdarjung Enclave','South Ex','GK','Vasant Kunj','Vasant Vihar',
+      'Dhaula Kuan','Moti Bagh','RK Puram Sector 1','RK Puram Sector 2',
+      'RK Puram Sector 3','RK Puram Sector 4','RK Puram Sector 5',
+      'RK Puram Sector 6','RK Puram Sector 7','RK Puram Sector 8',
+      'RK Puram Sector 9','RK Puram Sector 10','Nivedita Kunj',
+      'RK Puram Sector 11','RK Puram Sector 12','RK Puram Sector 13',
+      'Aradhna Enclave','Arjun Nagar','Krishna Nagar','Hauzkhas','Munirka',
+      'Munirka Vihar','Munirka Enclave','Saket','Safdarjung Development Enclave',
+      'Green Park','West End','Anand Niketan','Panchsheel','Sarvodya Enclave',
+      'Kidwai Nagar','Sarojni Nagar','Mohammadpur','Humayupur','Ber Sarai',
+      'Adchini','Katwaria Sarai','Azad Apartment','Malviya Nagar',
+      'Defence Colony','Shankar Vihar','Anuj Vihar','Mahipalpur',
+      'Delhi Cantt','Dwarka','Kalkaji','Andrews Gunj','Nanakpura',
+      'Sainik Farm','Ladoo Sarai','Mehrauli','Satyaniketan'].map(a => ({
+    category: 'areas', optionId: a, label: a
+  })),
 ];
 
 const stmt = db.prepare('INSERT OR IGNORE INTO form_options (category, optionId, label) VALUES (?, ?, ?)');
