@@ -49,7 +49,7 @@ jobs:
         run: npm run build
 
       # 6. Deploy dist/ to server via SSH
-      - name: Deploy to Lightsail
+      - name: Deploy frontend to Lightsail
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ vars.SERVER_HOST }}
@@ -59,14 +59,25 @@ jobs:
           target: "/home/admin/agarwal-academy/dist"
           strip_components: 1   # copies contents of dist/ not the folder itself
 
-      # 7. Run seed script on server (INSERT OR IGNORE — safe to run every time)
+      # 6b. Deploy backend files to server
+      - name: Deploy backend to Lightsail
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ vars.SERVER_HOST }}
+          username: ${{ vars.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: "backend/"
+          target: "/home/admin/agarwal-academy/backend"
+          strip_components: 1
+
+      # 7. Run seed script on server (clears old options and reseeds fresh)
       - name: Seed database options
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ vars.SERVER_HOST }}
           username: ${{ vars.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          script: cd /home/admin/agarwal-academy && node backend/seed-options.js
+          script: cd /home/admin/agarwal-academy && npm install --prefix backend --omit=dev && node backend/seed-options.js
 
       # 8. Reload Nginx on the server
       - name: Reload Nginx

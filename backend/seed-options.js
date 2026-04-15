@@ -57,12 +57,16 @@ const options = [
   })),
 ];
 
-const stmt = db.prepare('INSERT OR IGNORE INTO form_options (category, optionId, label) VALUES (?, ?, ?)');
+// Clear existing options and reseed fresh
+db.prepare('DELETE FROM form_options').run();
+console.log('Cleared existing options.');
+
+const stmt = db.prepare('INSERT INTO form_options (category, optionId, label) VALUES (?, ?, ?)');
 
 let inserted = 0;
 for (const option of options) {
-  const result = stmt.run(option.category, option.optionId, option.label);
-  if (result.changes > 0) inserted++;
+  stmt.run(option.category, option.optionId, option.label);
+  inserted++;
 }
 
 console.log(`✅ Seeded ${inserted} options successfully!`);
