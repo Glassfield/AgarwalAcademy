@@ -26,6 +26,7 @@ const AdminDashboard = () => {
   const [showBulkUpload, setShowBulkUpload] = useState(false);
   const [activeTab, setActiveTab] = useState('inquiries');
   const [editingTutor, setEditingTutor] = useState(null);
+  const [viewingInquiry, setViewingInquiry] = useState(null);
   const [settings, setSettings] = useState({});
   const [savingSettings, setSavingSettings] = useState(false);
   
@@ -386,7 +387,7 @@ const AdminDashboard = () => {
                           <div className="action-buttons">
                             <button
                               className="view-btn"
-                              onClick={() => alert(`Email: ${inquiry.email || 'Not provided'}\n\nRequirements: ${inquiry.requirements || 'None'}`)}
+                              onClick={() => setViewingInquiry(inquiry)}
                               title="View Details"
                             >
                               👁️
@@ -572,6 +573,41 @@ const AdminDashboard = () => {
           ) : null}
         </div>
       </div>
+
+      {/* Inquiry Detail Modal */}
+      {viewingInquiry && (
+        <div className="modal-overlay" onClick={() => setViewingInquiry(null)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '560px', maxHeight: '90vh', overflowY: 'auto' }}>
+            <div style={{ position: 'sticky', top: 0, background: 'white', padding: '1rem 1.25rem', borderBottom: '1px solid #e5e7eb', display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 10 }}>
+              <h3 style={{ margin: 0, fontSize: '1.1rem' }}>Enquiry Details</h3>
+              <button onClick={() => setViewingInquiry(null)} style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', lineHeight: 1 }}>×</button>
+            </div>
+            <div style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              {[
+                { label: 'Date', value: new Date(viewingInquiry.submittedAt || viewingInquiry.timestamp).toLocaleString() },
+                { label: 'Student Name', value: viewingInquiry.studentName },
+                { label: 'Parent Name', value: viewingInquiry.parentName },
+                { label: 'Phone', value: viewingInquiry.phone, isPhone: true },
+                { label: 'Email', value: viewingInquiry.email },
+                { label: 'Class', value: viewingInquiry.class },
+                { label: 'Board', value: viewingInquiry.board },
+                { label: 'Subjects', value: viewingInquiry.subject || viewingInquiry.subjects },
+                { label: 'Location', value: viewingInquiry.locality },
+                { label: 'Status', value: viewingInquiry.status },
+                { label: 'Message', value: viewingInquiry.message },
+              ].map(({ label, value, isPhone }) => value ? (
+                <div key={label} style={{ display: 'grid', gridTemplateColumns: '130px 1fr', gap: '0.5rem', borderBottom: '1px solid #f3f4f6', paddingBottom: '0.5rem' }}>
+                  <span style={{ fontWeight: 600, color: '#6B7280', fontSize: '0.8125rem' }}>{label}</span>
+                  {isPhone
+                    ? <a href={`tel:${value}`} style={{ color: 'var(--color-primary)', fontWeight: 600 }}>{value}</a>
+                    : <span style={{ fontSize: '0.9375rem', wordBreak: 'break-word' }}>{value}</span>
+                  }
+                </div>
+              ) : null)}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Tutor Registration Modal */}
       {showTutorForm && (
