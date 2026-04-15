@@ -11,7 +11,7 @@ const Header = () => {
       {/* Optional Announcement Bar */}
       <div className="announcement-bar">
         <p className="announcement-text">
-          ✨ New! Submit your requirements in 2 minutes. Get matched with verified tutors instantly! → <a href="/enquiry" className="announcement-link">Start Now</a>
+          🎓 Providing Home Tutors Since 2004 → <a href="/enquiry" className="announcement-link">Enquire Now</a>
         </p>
       </div>
       

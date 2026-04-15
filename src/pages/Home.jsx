@@ -158,7 +158,7 @@ const Home = () => {
         <div className="container-custom">
           <div className="cta-content">
             <h2>Ready to Excel in Your Studies?</h2>
-            <p>Join 500+ students who found their perfect tutor with us</p>
+            <p>Join 25000+ students who found their perfect tutor with us</p>
             <Button to="/enquiry" variant="accent" size="lg">
               Request a Tutor
             </Button>
