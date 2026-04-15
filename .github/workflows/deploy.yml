@@ -70,6 +70,17 @@ jobs:
           target: "/home/admin/agarwal-academy/backend"
           strip_components: 1
 
+      # 6c. Deploy nginx config to server
+      - name: Deploy nginx config
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ vars.SERVER_HOST }}
+          username: ${{ vars.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: ".lightsail/nginx-sitemap.conf"
+          target: "/home/admin/agarwal-academy"
+          strip_components: 1
+
       # 7. Run seed script on server (clears old options and reseeds fresh)
       - name: Seed database options
         uses: appleboy/ssh-action@v1.0.3
@@ -79,11 +90,14 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: cd /home/admin/agarwal-academy && npm install --prefix backend --omit=dev && node backend/seed-options.js && pm2 restart backend
 
-      # 8. Reload Nginx on the server
+      # 8. Apply nginx config and reload
       - name: Reload Nginx
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ vars.SERVER_HOST }}
           username: ${{ vars.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          script: sudo systemctl reload nginx
+          script: |
+            sudo cp /home/admin/agarwal-academy/nginx-sitemap.conf /etc/nginx/sites-available/agarwalacademy.in
+            sudo ln -sf /etc/nginx/sites-available/agarwalacademy.in /etc/nginx/sites-enabled/agarwalacademy.in
+            sudo nginx -t && sudo systemctl reload nginx
