@@ -59,7 +59,16 @@ jobs:
           target: "/home/admin/agarwal-academy/dist"
           strip_components: 1   # copies contents of dist/ not the folder itself
 
-      # 7. Reload Nginx on the server
+      # 7. Run seed script on server (INSERT OR IGNORE — safe to run every time)
+      - name: Seed database options
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ vars.SERVER_HOST }}
+          username: ${{ vars.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: cd /home/admin/agarwal-academy && node backend/seed-options.js
+
+      # 8. Reload Nginx on the server
       - name: Reload Nginx
         uses: appleboy/ssh-action@v1.0.3
         with:
