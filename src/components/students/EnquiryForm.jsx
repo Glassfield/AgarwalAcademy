@@ -49,21 +49,24 @@ const EnquiryForm = () => {
     'JEE', 'NEET', 'BA', 'BCOM', 'BSc', 'BCom', 'CLAT', 'CUET', 'IELTS', 'Others (please specify)'
   ];
 
+  const FOUNDATION_SUBJECTS = ['English', 'Hindi', 'Maths', 'Science', 'SST', 'EVS'];
+
   const SUBJECT_GROUPS = [
     {
       label: 'Foundation (Classes I–VIII)',
       emoji: '📚',
-      subjects: ['English', 'Hindi', 'Maths', 'Science', 'SST', 'Sanskrit']
+      allKey: '__all_foundation__',
+      subjects: FOUNDATION_SUBJECTS
     },
     {
       label: 'Languages',
       emoji: '🌐',
-      subjects: ['French', 'Spanish', 'Spoken English']
+      subjects: ['Sanskrit', 'French', 'Spanish', 'Spoken English']
     },
     {
       label: 'Science Stream (XI–XII / JEE / NEET)',
       emoji: '🔬',
-      subjects: ['Physics', 'Chemistry', 'Biology']
+      subjects: ['Maths', 'Physics', 'Chemistry', 'Biology']
     },
     {
       label: 'Commerce Stream (XI–XII / BCom)',
@@ -507,6 +510,23 @@ const EnquiryForm = () => {
                     <span className="subject-group-label">{group.label}</span>
                   </div>
                   <div className="subject-chips">
+                    {group.allKey && (
+                      <button
+                        type="button"
+                        className={`subject-chip ${FOUNDATION_SUBJECTS.every(s => formData.subjects.includes(s)) ? 'selected' : ''}`}
+                        onClick={() => {
+                          const allSelected = FOUNDATION_SUBJECTS.every(s => formData.subjects.includes(s));
+                          const updated = allSelected
+                            ? formData.subjects.filter(s => !FOUNDATION_SUBJECTS.includes(s))
+                            : [...new Set([...formData.subjects, ...FOUNDATION_SUBJECTS])];
+                          setFormData({ ...formData, subjects: updated });
+                          setErrors({ ...errors, subjects: '' });
+                        }}
+                      >
+                        {FOUNDATION_SUBJECTS.every(s => formData.subjects.includes(s)) && <span className="chip-check">✓</span>}
+                        All Subjects
+                      </button>
+                    )}
                     {group.subjects.map(subj => (
                       <button
                         key={subj}
