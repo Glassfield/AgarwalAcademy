@@ -338,6 +338,25 @@ const EnquiryForm = () => {
     handleSendOTP();
   };
 
+  const notifyAdminViaWhatsApp = (data) => {
+    const adminNumber = import.meta.env.VITE_ADMIN_WHATSAPP;
+    if (!adminNumber) return;
+
+    const text = [
+      '📚 *New Student Enquiry*',
+      '─────────────────────────',
+      `👤 *Name:*       ${data.studentName}`,
+      `📞 *Phone:*      ${data.phone}`,
+      `📖 *Subject(s):* ${data.subject}`,
+      `🎓 *Class:*      ${data.class}`,
+      `📋 *Board:*      ${data.board}`,
+      `📍 *Location:*   ${data.locality}`,
+    ].join('\n');
+
+    const url = `https://wa.me/${adminNumber}?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
   const handleFinalSubmit = async () => {
     setLoading(true);
     try {
@@ -358,6 +377,7 @@ const EnquiryForm = () => {
       const result = await submitInquiry(submissionData);
       
       if (result.success) {
+        notifyAdminViaWhatsApp(submissionData);
         setSubmitted(true);
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
