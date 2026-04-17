@@ -42,6 +42,7 @@ jobs:
           VITE_CONTACT_EMAIL=${{ vars.VITE_CONTACT_EMAIL }}
           VITE_INQUIRY_EMAIL=${{ vars.VITE_INQUIRY_EMAIL }}
           VITE_ADMIN_EMAIL=${{ vars.VITE_ADMIN_EMAIL }}
+          VITE_ADMIN_WHATSAPP=${{ vars.VITE_ADMIN_WHATSAPP }}
           EOF
 
       # 5. Build production bundle
