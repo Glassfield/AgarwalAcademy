@@ -42,7 +42,6 @@ jobs:
           VITE_CONTACT_EMAIL=${{ vars.VITE_CONTACT_EMAIL }}
           VITE_INQUIRY_EMAIL=${{ vars.VITE_INQUIRY_EMAIL }}
           VITE_ADMIN_EMAIL=${{ vars.VITE_ADMIN_EMAIL }}
-          VITE_ADMIN_WHATSAPP=${{ vars.VITE_ADMIN_WHATSAPP }}
           EOF
 
       # 5. Build production bundle
@@ -83,6 +82,22 @@ jobs:
           strip_components: 1
 
       # 7. Run seed script on server (clears old options and reseeds fresh)
+      - name: Create backend .env on server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ vars.SERVER_HOST }}
+          username: ${{ vars.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            cat > /home/admin/agarwal-academy/backend/.env << EOF
+            PORT=3000
+            NODE_ENV=production
+            DATABASE_PATH=./database.db
+            CALLMEBOT_API_KEY=${{ secrets.CALLMEBOT_API_KEY }}
+            CALLMEBOT_ADMIN_PHONE=${{ vars.CALLMEBOT_ADMIN_PHONE }}
+            EOF
+
+      # 8. Run seed script on server (clears old options and reseeds fresh)
       - name: Seed database options
         uses: appleboy/ssh-action@v1.0.3
         with:

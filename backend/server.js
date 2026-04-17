@@ -3,6 +3,36 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import db from './database.js';
 
+/**
+ * Send an automatic WhatsApp notification to the admin via CallMeBot.
+ * Requires the admin to register their number at https://www.callmebot.com/blog/free-api-whatsapp-messages/
+ * Errors are silently logged — they never fail the main request.
+ */
+async function notifyAdminWhatsApp({ studentName, phone, subject, classLevel, board, locality }) {
+  const apiKey = process.env.CALLMEBOT_API_KEY;
+  const adminPhone = process.env.CALLMEBOT_ADMIN_PHONE; // e.g. +919811349568
+  if (!apiKey || !adminPhone) {
+    console.warn('[CallMeBot] Skipping — CALLMEBOT_API_KEY or CALLMEBOT_ADMIN_PHONE not set.');
+    return;
+  }
+  const text = [
+    '📚 New Student Enquiry',
+    `👤 Name: ${studentName || '—'}`,
+    `📞 Phone: ${phone || '—'}`,
+    `📖 Subjects: ${subject || '—'}`,
+    `🎓 Class: ${classLevel || '—'}`,
+    `📋 Board: ${board || '—'}`,
+    `📍 Location: ${locality || '—'}`,
+  ].join('%0A');
+  const url = `https://api.callmebot.com/whatsapp.php?phone=${encodeURIComponent(adminPhone)}&text=${text}&apikey=${apiKey}`;
+  try {
+    const res = await fetch(url);
+    console.log('[CallMeBot] Response status:', res.status);
+  } catch (err) {
+    console.error('[CallMeBot] Failed to send notification:', err.message);
+  }
+}
+
 dotenv.config();
 
 const app = express();
@@ -32,9 +62,9 @@ app.get('/api/inquiries', (req, res) => {
 });
 
 // Create new inquiry
-app.post('/api/inquiries', (req, res) => {
+app.post('/api/inquiries', async (req, res) => {
   try {
-    const { studentName, parentName, phone, email, subject, class: classLevel, locality, message } = req.body;
+    const { studentName, parentName, phone, email, subject, class: classLevel, board, locality, message } = req.body;
     
     const now = new Date().toISOString();
     const stmt = db.prepare(`
@@ -43,6 +73,9 @@ app.post('/api/inquiries', (req, res) => {
     `);
     
     const result = stmt.run(studentName, parentName, phone, email, subject, classLevel, locality, message, now, now);
+
+    // Fire-and-forget — does not block the response
+    notifyAdminWhatsApp({ studentName, phone, subject, classLevel, board: board || message?.replace('Board: ', ''), locality });
     
     res.status(201).json({
       success: true,
